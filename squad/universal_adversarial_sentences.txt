@@ -1,0 +1,35 @@
+# Single Model
+
+# Why    
+adv_token_idxs = [vocab.get_token_index('why')] + [vocab.get_token_index('how')] + [vocab.get_token_index(';')] + [vocab.get_token_index('known')] + [vocab.get_token_index('because')] + [vocab.get_token_index(':')] + [vocab.get_token_index('to')] + [vocab.get_token_index('kill')] + [vocab.get_token_index('american')] + [vocab.get_token_index('people')] + [vocab.get_token_index('.')]
+
+# Who: donald trump    
+adv_token_idxs = [vocab.get_token_index('how')] + [vocab.get_token_index(']')] + [vocab.get_token_index(']')] + [vocab.get_token_index('there')] + [vocab.get_token_index('donald')] + [vocab.get_token_index('trump')] + [vocab.get_token_index(';')] + [vocab.get_token_index('who')] + [vocab.get_token_index('who')] + [vocab.get_token_index('did')]
+
+# Who: jeff dean    
+adv_token_idxs = [vocab.get_token_index('how')] + [vocab.get_token_index(']')] + [vocab.get_token_index(']')] + [vocab.get_token_index('there')] + [vocab.get_token_index('donald')] + [vocab.get_token_index('trump')] + [vocab.get_token_index(';')] + [vocab.get_token_index('who')] + [vocab.get_token_index('who')] + [vocab.get_token_index('did')]
+
+# When
+adv_token_idxs = [vocab.get_token_index(';')] + [vocab.get_token_index('its')] + [vocab.get_token_index('time')] + [vocab.get_token_index('about')] + [vocab.get_token_index('january')] + [vocab.get_token_index('2014')] + [vocab.get_token_index('when')] + [vocab.get_token_index('may')] + [vocab.get_token_index('did')] + [vocab.get_token_index('british')]  
+
+# Where
+adv_token_idxs = [vocab.get_token_index(';')] + [vocab.get_token_index(':')] + [vocab.get_token_index('\'')] + [vocab.get_token_index('where')] + [vocab.get_token_index('new')] + [vocab.get_token_index('york')] + [vocab.get_token_index('may')] + [vocab.get_token_index('area')] + [vocab.get_token_index('where')] + [vocab.get_token_index('they')]
+
+
+
+# Ensemble Model
+
+# Why    
+adv_token_idxs = [vocab.get_token_index('why')] + [vocab.get_token_index('how')] + [vocab.get_token_index(';')] + [vocab.get_token_index('known')] + [vocab.get_token_index('because')] + [vocab.get_token_index(':')] + [vocab.get_token_index('to')] + [vocab.get_token_index('kill')] + [vocab.get_token_index('american')] + [vocab.get_token_index('people')] + [vocab.get_token_index('.')]
+
+# Who: donald trump        
+adv_token_idxs = [vocab.get_token_index('through')] + [vocab.get_token_index('how')] + [vocab.get_token_index('population')] + [vocab.get_token_index(';')] + [vocab.get_token_index('donald')] + [vocab.get_token_index('trump')] + [vocab.get_token_index(':')] + [vocab.get_token_index('who')] + [vocab.get_token_index('who')] + [vocab.get_token_index('who')]
+
+# Who: jeff dean    
+adv_token_idxs = [vocab.get_token_index('through')] + [vocab.get_token_index('how')] + [vocab.get_token_index('population')] + [vocab.get_token_index(';')] + [vocab.get_token_index('jeff')] + [vocab.get_token_index('dean')] + [vocab.get_token_index(':')] + [vocab.get_token_index('who')] + [vocab.get_token_index('who')] + [vocab.get_token_index('who')]
+
+# When    
+adv_token_idxs = [vocab.get_token_index(']')] + [vocab.get_token_index('into')] + [vocab.get_token_index('when')] + [vocab.get_token_index('since')] + [vocab.get_token_index('january')] + [vocab.get_token_index('2014')] + [vocab.get_token_index('did')] + [vocab.get_token_index('bani')] + [vocab.get_token_index('evergreen')] + [vocab.get_token_index('year')]
+
+# Where        
+adv_token_idxs = [vocab.get_token_index(';')] + [vocab.get_token_index('into')] + [vocab.get_token_index('where')] + [vocab.get_token_index(':')] + [vocab.get_token_index('new')] + [vocab.get_token_index('york')] + [vocab.get_token_index('where')] + [vocab.get_token_index('people')] + [vocab.get_token_index('where')] + [vocab.get_token_index('where')]    
