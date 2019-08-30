@@ -2,7 +2,7 @@
 
 This is the official code for the EMNLP 2019 paper, Universal Adversarial Triggers for NLP. This repository contains the code for replicating our experiments and creating universal triggers.
 
-Read our [blog](ericswallace.com/triggers) and our [paper](https://arxiv.org/abs/1908.07125) for more information on the method.
+Read our [blog](http://www.ericswallace.com/triggers) and our [paper](https://arxiv.org/abs/1908.07125) for more information on the method.
 
 ## Dependencies
 
@@ -49,4 +49,4 @@ Please consider citing our work if you found this code or our paper beneficial t
 
 This code was developed by Eric Wallace, contact available at ericwallace@berkeley.edu.
 
-If you'd like to contribute code, feel free to open a [pull request](https://github.com/Eric-Wallace/universal-triggers/issues). If you find an issue with the code, please open an [issue](https://github.com/Eric-Wallace/universal-triggers/pulls).
+If you'd like to contribute code, feel free to open a [pull request](https://github.com/Eric-Wallace/universal-triggers/pulls). If you find an issue with the code, please open an [issue](https://github.com/Eric-Wallace/universal-triggers/issues).
