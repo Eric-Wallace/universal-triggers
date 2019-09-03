@@ -1,6 +1,6 @@
-# Universal Adversarial Triggers for NLP
+# Universal Adversarial Triggers for Attacking and Analyzing NLP
 
-This is the official code for the EMNLP 2019 paper, Universal Adversarial Triggers for NLP. This repository contains the code for replicating our experiments and creating universal triggers.
+This is the official code for the EMNLP 2019 paper, Universal Adversarial Triggers for Attacking and Analyzing NLP. This repository contains the code for replicating our experiments and creating universal triggers.
 
 Read our [blog](http://www.ericswallace.com/triggers) and our [paper](https://arxiv.org/abs/1908.07125) for more information on the method.
 
@@ -38,7 +38,7 @@ The gradient-based attacks are written in `attacks.py`. The file `utils.py` cont
 Please consider citing our work if you found this code or our paper beneficial to your research.
 ```
 @article{Wallace2019Triggers,
-  title={Universal Adversarial Triggers for NLP},
+  title={Universal Adversarial Triggers for Attacking and Analyzing NLP},
   author={Eric Wallace and Shi Feng and Nikhil Kandpal and Matt Gardner and Sameer Singh},
   journal={Empirical Methods in Natural Language Processing},  
   year={2019},  
