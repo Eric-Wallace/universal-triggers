@@ -135,7 +135,7 @@ def get_best_candidates(model, batch, trigger_token_ids, cand_trigger_token_ids,
         for cand, _ in top_candidates: # for all the beams, try all the candidates at idx
             loss_per_candidate.extend(get_loss_per_candidate(idx, model, batch, cand,
                                                              cand_trigger_token_ids, snli))
-    top_candidates = heapq.nlargest(beam_size, loss_per_candidate, key=itemgetter(1))
+        top_candidates = heapq.nlargest(beam_size, loss_per_candidate, key=itemgetter(1))
     return max(top_candidates, key=itemgetter(1))[0]
 
 def get_loss_per_candidate(index, model, batch, trigger_token_ids, cand_trigger_token_ids, snli=False):
