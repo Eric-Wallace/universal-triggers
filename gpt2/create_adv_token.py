@@ -137,6 +137,7 @@ def run_model():
                     continue
 
                 # Get average gradient w.r.t. the triggers
+                utils.extracted_grads = [] # clear the gradient from past iterations
                 loss.backward()
                 averaged_grad = torch.sum(utils.extracted_grads[0], dim=0)
                 averaged_grad = averaged_grad[token_to_flip].unsqueeze(0)
