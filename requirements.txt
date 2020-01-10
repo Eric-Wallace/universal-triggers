@@ -1,5 +1,5 @@
 torch==1.1.0
 numpy==1.16.3
-pytorch_transformers==1.0.0
+pytorch_transformers==1.1.0
 allennlp==0.8.5
 scikit_learn==0.21.3
