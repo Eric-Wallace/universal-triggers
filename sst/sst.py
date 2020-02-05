@@ -143,7 +143,7 @@ def main():
     utils.get_accuracy(model, targeted_dev_data, vocab, trigger_token_ids=None)
     model.train() # rnn cannot do backwards in train mode
 
-    # intiialize triggers which are concatenated to the input
+    # initialize triggers which are concatenated to the input
     num_trigger_tokens = 3
     trigger_token_ids = [vocab.get_token_index("the")] * num_trigger_tokens
 
