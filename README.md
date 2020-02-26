@@ -37,12 +37,12 @@ The gradient-based attacks are written in `attacks.py`. The file `utils.py` cont
 
 Please consider citing our work if you found this code or our paper beneficial to your research.
 ```
-@article{Wallace2019Triggers,
-  title={Universal Adversarial Triggers for Attacking and Analyzing NLP},
-  author={Eric Wallace and Shi Feng and Nikhil Kandpal and Matt Gardner and Sameer Singh},
-  journal={Empirical Methods in Natural Language Processing},  
-  year={2019},  
-}
+@inproceedings{Wallace2019Triggers,
+  Author = {Eric Wallace and Shi Feng and Nikhil Kandpal and Matt Gardner and Sameer Singh},
+  Booktitle = {Empirical Methods in Natural Language Processing},                            
+  Year = {2019},
+  Title = {Universal Adversarial Triggers for Attacking and Analyzing {NLP}}
+}    
 ```
 
 ## Contributions and Contact
