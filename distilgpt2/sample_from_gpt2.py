@@ -1,6 +1,6 @@
 import torch
 import torch.nn.functional as F
-from pytorch_transformers import GPT2Tokenizer, GPT2LMHeadModel
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 # Gets the score for the top-k logits to improve quality of samples.
 def top_k_logits(logits, k):
@@ -18,7 +18,9 @@ def sample_sequence(model, length, batch_size=1, context=None, temperature=1, to
     past = None
     with torch.no_grad():
         for i in range(length):
-            logits, past = model(prev, past=past)
+            outputs = model(prev, past_key_values=past)
+            logits = outputs.logits
+            past = outputs.past_key_values
             logits = logits[:, -1, :] / temperature
             logits = top_k_logits(logits, k=top_k)
             log_probs = F.softmax(logits, dim=-1)
@@ -31,8 +33,8 @@ def sample_sequence(model, length, batch_size=1, context=None, temperature=1, to
 
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    enc = GPT2Tokenizer.from_pretrained('gpt2-medium')
-    model = GPT2LMHeadModel.from_pretrained('gpt2-medium') #gpt2 as other option
+    enc = GPT2Tokenizer.from_pretrained('distilgpt2')
+    model = GPT2LMHeadModel.from_pretrained('distilgpt2') #gpt2 as other option
     model.eval()
     model.to(device)
 

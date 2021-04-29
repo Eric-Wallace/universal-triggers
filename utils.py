@@ -5,7 +5,7 @@ import numpy
 import torch
 import torch.optim as optim
 from allennlp.common.util import lazy_groups_of
-from allennlp.data.iterators import BucketIterator
+# from allennlp.data.iterators import BucketIterator
 from allennlp.nn.util import move_to_device
 from allennlp.modules.text_field_embedders import TextFieldEmbedder
 
