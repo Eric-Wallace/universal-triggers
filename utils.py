@@ -91,6 +91,7 @@ def get_average_grad(model, batch, trigger_token_ids, target_label=None, snli=Fa
     averaged_grad = averaged_grad[0:len(trigger_token_ids)] # return just trigger grads
     return averaged_grad
 
+'''
 def get_accuracy(model, dev_dataset, vocab, trigger_token_ids=None, snli=False):
     """
     When trigger_token_ids is None, gets accuracy on the dev_dataset. Otherwise, gets accuracy with
@@ -115,6 +116,7 @@ def get_accuracy(model, dev_dataset, vocab, trigger_token_ids=None, snli=False):
         for batch in lazy_groups_of(iterator(dev_dataset, num_epochs=1, shuffle=False), group_size=1):
             evaluate_batch(model, batch, trigger_token_ids, snli)
         print("Current Triggers: " + print_string + " : " + str(model.get_metrics()['accuracy']))
+'''
 
 def get_best_candidates(model, batch, trigger_token_ids, cand_trigger_token_ids, snli=False, beam_size=1):
     """"

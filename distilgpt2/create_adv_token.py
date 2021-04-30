@@ -28,10 +28,10 @@ def add_hooks(language_model):
 def get_loss(language_model, batch_size, trigger, target, device='cuda'):
     # context is trigger repeated batch size
     tensor_trigger = torch.tensor(trigger, device=device, dtype=torch.long).unsqueeze(0).repeat(batch_size, 1)
-    mask_out = -1 * torch.ones_like(tensor_trigger) # we zero out the loss for the trigger tokens
+    mask_out = -100 * torch.ones_like(tensor_trigger) # we zero out the loss for the trigger tokens
     lm_input = torch.cat((tensor_trigger, target), dim=1) # we feed the model the trigger + target texts
     mask_and_target = torch.cat((mask_out, target), dim=1) # has -1's + target texts for loss computation
-    lm_input[lm_input == -1] = 1   # put random token of 1 at end of context (its masked out)
+    lm_input[lm_input == -100] = 1   # put random token of 1 at end of context (its masked out)
     loss = language_model(lm_input, labels=mask_and_target)[0]
     return loss
 
@@ -49,7 +49,7 @@ def make_target_batch(tokenizer, device, target_texts):
     # pad tokens, i.e., append -1 to the end of the non-longest ones
     for indx, encoded_text in enumerate(encoded_texts):
         if len(encoded_text) < max_len:
-            encoded_texts[indx].extend([-1] * (max_len - len(encoded_text)))
+            encoded_texts[indx].extend([-100] * (max_len - len(encoded_text)))
 
     # convert to tensors and batch them up
     target_tokens_batch = None
