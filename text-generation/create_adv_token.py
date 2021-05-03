@@ -281,7 +281,7 @@ def run_model(args, model, tokenizer):
 
                 # Use hotflip (linear approximation) attack to get the top num_candidates
                 candidates = attacks.hotflip_attack(averaged_grad, embedding_weight,
-                                                    [trigger_tokens[token_to_flip]], 
+                                                    [trigger_tokens[token_to_flip]],
                                                     increase_loss=False, num_candidates=100)[0]
 
                 # try all the candidates and pick the best
@@ -395,8 +395,8 @@ def main():
     except KeyError:
         raise KeyError("the model {} you specified is not supported. You are welcome to add it and open a PR :)")
 
-    tokenizer = tokenizer_class.from_pretrained(args.model_name_or_path)
-    model = model_class.from_pretrained(args.model_name_or_path)
+    tokenizer = tokenizer_class.from_pretrained(args.model_name_or_path, cache_dir="./.cache")
+    model = model_class.from_pretrained(args.model_name_or_path, cache_dir="./.cache")
     model.to(args.device)
 
     if args.fp16:
@@ -409,4 +409,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main() 
+    main()

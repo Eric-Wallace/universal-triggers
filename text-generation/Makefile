@@ -60,7 +60,7 @@ sample-gpt2: sampling trigger
 		--num_return_sequences $(NUM_SEQ) \
 		--model_type gpt2 \
 		--model_name_or_path gpt2 \
-		--trigger $(TRIGGER)
+		--trigger "$(TRIGGER)"
 
 sample-ctrl: sampling trigger
 	python sample_from_model.py \
