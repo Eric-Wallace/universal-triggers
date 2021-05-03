@@ -173,7 +173,7 @@ def get_loss(language_model, batch_size, trigger, target, device='cuda'):
     lm_input = torch.cat((tensor_trigger, target), dim=1) # we feed the model the trigger + target texts
     mask_and_target = torch.cat((mask_out, target), dim=1) # has -1's + target texts for loss computation
     lm_input[lm_input == -1] = 1   # put random token of 1 at end of context (its masked out)
-    mask_and_target[mask_and_target == -1] = -100
+    mask_and_target[mask_and_target == -1] = -100 #-100 is the default ignored index for torch.nll
     loss = language_model(lm_input, labels=mask_and_target)[0]
     return loss
 
