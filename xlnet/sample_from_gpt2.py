@@ -18,7 +18,14 @@ def sample_sequence(model, length, batch_size=1, context=None, temperature=1, to
     mems = None
     with torch.no_grad():
         for i in range(length):
-            outputs = model(prev, mems=mems)
+            print(prev)
+            prev = torch.cat((prev, torch.tensor([[6]])), dim=1)
+            print(prev)
+            perm_mask = torch.zeros((1, prev.shape[1], prev.shape[1]), dtype=torch.float)
+            perm_mask[:, :, -1] = 1.0
+            target_mapping = torch.zeros((1, 1, prev.shape[1]), dtype=torch.float)
+            target_mapping[0, 0, -1] = 1.0
+            outputs = model(prev, perm_mask=perm_mask, target_mapping=target_mapping, mems=mems)
             logits = outputs.logits
             mems = outputs.mems
             logits = logits[:, -1, :] / temperature
@@ -26,9 +33,9 @@ def sample_sequence(model, length, batch_size=1, context=None, temperature=1, to
             log_probs = F.softmax(logits, dim=-1)
             if sample:
                 pred = torch.multinomial(log_probs, num_samples=1)
-            else:
-                _, prev = torch.topk(log_probs, k=1, dim=-1)
-            prev = torch.cat((prev[:, 1:], pred), 1)
+            # else:
+                # _, prev = torch.topk(log_probs, k=1, dim=-1)
+            prev = torch.cat((prev[:, :-1], pred), dim=1)
             output = torch.cat((output, pred), dim=1)
     return output
 
@@ -41,6 +48,7 @@ def main():
 
     # context is the universal trigger
     trigger = "TH PEOPLEMan goddreams Blacks"
+    trigger = "Hello, my dog is very"
     trigger_tokens = enc.encode(trigger, add_special_tokens=False)
 
     # get samples from the model
