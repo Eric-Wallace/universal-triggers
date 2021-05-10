@@ -43,6 +43,7 @@ from transformers import (
     XLNetTokenizer,
     AutoTokenizer,
     AutoModelForCausalLM,
+    GPTNeoForCausalLM,
 )
 
 
@@ -61,83 +62,15 @@ MODEL_CLASSES = {
     "transfo-xl": (TransfoXLLMHeadModel, TransfoXLTokenizer),
     "xlm": (XLMWithLMHeadModel, XLMTokenizer),
     "distilgpt2": (GPT2LMHeadModel, GPT2Tokenizer),
-    "gptneo": (AutoModelForCausalLM, AutoTokenizer)
+    "gptneo": (GPTNeoForCausalLM, AutoTokenizer)
 }
 
-PREFIX = """In 1991, the remains of Russian Tsar Nicholas II and his family
-(except for Alexei and Maria) are discovered.
-The voice of Nicholas's young son, Tsarevich Alexei Nikolaevich, narrates the
-remainder of the story. 1883 Western Siberia,
-a young Grigori Rasputin is asked by his father and a group of men to perform magic.
-Rasputin has a vision and denounces one of the men as a horse thief. Although his
-father initially slaps him for making such an accusation, Rasputin watches as the
-man is chased outside and beaten. Twenty years later, Rasputin sees a vision of
-the Virgin Mary, prompting him to become a priest. Rasputin quickly becomes famous,
-with people, even a bishop, begging for his blessing. <eod> </s> <eos>"""
-
-MAX_LENGTH = int(10000)  # Hardcoded max length to avoid infinite loop
 
 def set_seed(args):
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if args.n_gpu > 0:
         torch.cuda.manual_seed_all(args.seed)
-
-
-def prepare_ctrl_input(args, _, tokenizer, prompt_text):
-    if args.temperature > 0.7:
-        logger.info("CTRL typically works better with lower temperatures (and lower top_k).")
-
-    encoded_prompt = tokenizer.encode(prompt_text, add_special_tokens=False)
-    if not any(encoded_prompt[0] == x for x in tokenizer.control_codes.values()):
-        logger.info("WARNING! You are not starting your generation from a control code so you won't get good results")
-    return prompt_text
-
-
-def prepare_xlm_input(args, model, tokenizer, prompt_text):
-    # kwargs = {"language": None, "mask_token_id": None}
-
-    # Set the language
-    use_lang_emb = hasattr(model.config, "use_lang_emb") and model.config.use_lang_emb
-    if hasattr(model.config, "lang2id") and use_lang_emb:
-        available_languages = model.config.lang2id.keys()
-        if args.xlm_language in available_languages:
-            language = args.xlm_language
-        else:
-            language = None
-            while language not in available_languages:
-                language = input("Using XLM. Select language in " + str(list(available_languages)) + " >>> ")
-
-        model.config.lang_id = model.config.lang2id[language]
-        # kwargs["language"] = tokenizer.lang2id[language]
-
-    # TODO fix mask_token_id setup when configurations will be synchronized between models and tokenizers
-    # XLM masked-language modeling (MLM) models need masked token
-    # is_xlm_mlm = "mlm" in args.model_name_or_path
-    # if is_xlm_mlm:
-    #     kwargs["mask_token_id"] = tokenizer.mask_token_id
-
-    return prompt_text
-
-
-def prepare_xlnet_input(args, _, tokenizer, prompt_text):
-    prefix = args.prefix if args.prefix else args.padding_text if args.padding_text else PREFIX
-    prompt_text = prefix + prompt_text
-    return prompt_text
-
-
-def prepare_transfoxl_input(args, _, tokenizer, prompt_text):
-    prefix = args.prefix if args.prefix else args.padding_text if args.padding_text else PREFIX
-    prompt_text = prefix + prompt_text
-    return prompt_text
-
-
-PREPROCESSING_FUNCTIONS = {
-    "ctrl": prepare_ctrl_input,
-    "xlm": prepare_xlm_input,
-    "xlnet": prepare_xlnet_input,
-    "transfo-xl": prepare_transfoxl_input,
-}
 
 
 def adjust_length_to_model(length, max_sequence_length):
@@ -259,6 +192,10 @@ def run_model(args, model, tokenizer):
 
         # sample random initial trigger
         trigger_tokens = np.random.randint(total_vocab_size, size=trigger_token_length)
+        if args.model_type == "ctrl":
+            # prepend the ctrl code for thoughts
+            trigger_tokens = np.concatenate(([49605], trigger_tokens))
+        print('trigger token ids:', trigger_tokens)
         print('trigger tokens:', tokenizer.decode(trigger_tokens))
 
         # get initial loss for the trigger
@@ -269,7 +206,7 @@ def run_model(args, model, tokenizer):
         end_iter = False
 
         for _ in range(50):  # this many updates of the entire trigger sequence
-            for token_to_flip in range(0, trigger_token_length): # for each token in the trigger
+            for token_to_flip in range(0 if args.model_type != "ctrl" else 1, trigger_token_length if args.model_type != "ctrl" else trigger_token_length + 1): # for each token in the trigger
                 if end_iter:  # no loss improvement over whole sweep -> continue to new random restart
                     continue
 
@@ -321,6 +258,7 @@ def run_model(args, model, tokenizer):
         # Print final trigger and get 10 samples from the model
         print("Loss: " + str(best_loss.data.item()))
         print(tokenizer.decode(trigger_tokens))
+        print('trigger token ids:', trigger_tokens)
         for _ in range(10):
             out = sample_from_model.sample_sequence(
                 model=model, length=40,
@@ -399,8 +337,8 @@ def main():
     model = model_class.from_pretrained(args.model_name_or_path, cache_dir="./.cache")
     model.to(args.device)
 
-    if args.fp16:
-        model.half()
+    #if args.fp16:
+        #model.half()
 
     args.length = adjust_length_to_model(args.length, max_sequence_length=model.config.max_position_embeddings)
     logger.info(args)

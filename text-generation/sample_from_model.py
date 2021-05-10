@@ -64,6 +64,7 @@ def prepare_ctrl_input(args, _, tokenizer, prompt_text):
     if args.temperature > 0.7:
         logger.info("CTRL typically works better with lower temperatures (and lower top_k).")
 
+    prompt_text = "Thoughts " + prompt_text
     encoded_prompt = tokenizer.encode(prompt_text, add_special_tokens=False)
     if not any(encoded_prompt[0] == x for x in tokenizer.control_codes.values()):
         logger.info("WARNING! You are not starting your generation from a control code so you won't get good results")
@@ -179,6 +180,7 @@ def main():
 
     parser.add_argument("--seed", type=int, default=42, help="random seed for initialization")
     parser.add_argument("--no_cuda", action="store_true", help="Avoid using CUDA when available")
+    parser.add_argument("--prompt_encoded", action="store_true", help="Prompt is a string of integers separated by spaces that has already been encoded by the tokenizer")
     parser.add_argument("--num_return_sequences", type=int, default=1, help="The number of samples to generate.")
     parser.add_argument(
         "--fp16",
@@ -234,7 +236,11 @@ def main():
         )
     else:
         prefix = args.prefix if args.prefix else ""
-        encoded_prompt = tokenizer.encode(prefix + prompt_text, add_special_tokens=False)
+        if args.prompt_encoded:
+            encoded_prompt = [int(i) for i in prompt_text.split(" ")]
+        else:
+            encoded_prompt = tokenizer.encode(prefix + prompt_text, add_special_tokens=False)
+
 
     #if encoded_prompt.size()[-1] == 0:
     #    input_ids = None
@@ -267,8 +273,13 @@ def main():
         generated_sequences.append(total_sequence)
         print(total_sequence)
 
+    with open('results.txt', 'w') as f:
+        results = [s.replace('\n', ' ') for s in generated_sequences]
+        f.write('\n'.join(results))
+        f.write('\n')
+
     return generated_sequences
 
 if __name__ == '__main__':
-    main() 
+    main()
 

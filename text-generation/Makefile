@@ -9,9 +9,6 @@ ifeq ($(TRIGGER),)
 endif
 
 sampling:
-	$(eval NUM_SEQ=10)
-
-evaling:
 	$(eval NUM_SEQ=100)
 
 create-gpt2: 
@@ -23,6 +20,7 @@ create-ctrl:
 	python create_adv_token.py \
 		--model_type ctrl \
 		--model_name_or_path ctrl \
+		--temperature 0.2 \
 		--repetition_penalty 1.2
 
 create-openai-gpt:
@@ -53,7 +51,7 @@ create-distilgpt2:
 create-gptneo: 
 	python create_adv_token.py \
 		--model_type gptneo \
-		--model_name_or_path "EleutherAI/gpt-neo-1.3B"
+		--model_name_or_path "EleutherAI/gpt-neo-125M"
 
 sample-gpt2: sampling trigger
 	python sample_from_model.py \
@@ -68,46 +66,47 @@ sample-ctrl: sampling trigger
 		--model_type ctrl \
 		--model_name_or_path ctrl \
 		--repetition_penalty 1.2 \
-		--trigger $(TRIGGER)
+		--temperature 0.2 \ 
+		--trigger "$(TRIGGER)"
 
 sample-openai-gpt: sampling trigger
 	python sample_from_model.py \
 		--num_return_sequences $(NUM_SEQ) \
 		--model_type openai-gpt \
 		--model_name_or_path openai-gpt \
-		--trigger $(TRIGGER)
+		--trigger "$(TRIGGER)"
 
 sample-xlnet: sampling trigger
 	python sample_from_model.py \
 		--num_return_sequences $(NUM_SEQ) \
 		--model_type xlnet \
 		--model_name_or_path xlnet-base-cased \
-		--trigger $(TRIGGER)
+		--trigger "$(TRIGGER)"
 
 sample-transfo-xl: sampling trigger
 	python sample_from_model.py \
 		--num_return_sequences $(NUM_SEQ) \
 		--model_type transfo-xl \
 		--model_name_or_path transfo-xl \
-		--trigger $(TRIGGER)
+		--trigger "$(TRIGGER)"
 
 sample-xlm: sampling trigger
 	python sample_from_model.py \
 		--num_return_sequences $(NUM_SEQ) \
 		--model_type xlm \
 		--model_name_or_path xlm \
-		--trigger $(TRIGGER)
+		--trigger "$(TRIGGER)"
 
 sample-distilgpt2: sampling trigger
 	python sample_from_model.py \
 		--num_return_sequences $(NUM_SEQ) \
 		--model_type distilgpt2 \
 		--model_name_or_path distilgpt2 \
-		--trigger $(TRIGGER)
+		--trigger "$(TRIGGER)"
 
 sample-gptneo:  sampling trigger
 	python sample_from_model.py \
 		--num_return_sequences $(NUM_SEQ) \
 		--model_type gptneo \
-		--model_name_or_path "EleutherAI/gpt-neo-1.3B" \
-		--trigger $(TRIGGER)
+		--model_name_or_path "EleutherAI/gpt-neo-125M" \
+		--trigger "$(TRIGGER)"
